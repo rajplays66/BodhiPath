@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tripiṭaka — The Buddhist Encyclopedia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --crimson:       #7a1515;
+  --crimson-deep:  #4e0c0c;
+  --crimson-glow:  #9b2020;
+  --gold:          #c8a84b;
+  --gold-bright:   #e2c26e;
+  --gold-pale:     #f2e4b8;
+  --gold-dim:      #8a6e2a;
+  --ink:           #120a02;
+  --ink-soft:      #1e1206;
+  --parchment:     #f7f0dc;
+  --parchment-mid: #ede0bb;
+  --parchment-drk: #d9c993;
+  --sepia:         #6b4c1e;
+  --sepia-light:   #9a7040;
+  --smoke:         rgba(200,168,75,0.12);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Gentium Book Plus', Georgia, serif;
+  background: var(--ink);
+  color: var(--parchment);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── CUSTOM CURSOR ── */
+body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='2' fill='%23c8a84b'/%3E%3C/svg%3E") 12 12, auto; }
+
+/* ── BACKGROUND TEXTURE ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(200,168,75,0.015) 40px, rgba(200,168,75,0.015) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(200,168,75,0.015) 40px, rgba(200,168,75,0.015) 41px);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--crimson); border-radius:0; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* ══════════════════════════════
+   TOP BANNER
+══════════════════════════════ */
+.top-banner {
+  background: var(--crimson-deep);
+  border-bottom: 1px solid rgba(200,168,75,0.25);
+  padding: 0.45rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: rgba(200,168,75,0.5);
+  text-transform: uppercase;
+}
+
+.top-banner .lang-switcher { display: flex; gap: 1rem; }
+.top-banner .lang-switcher span {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.top-banner .lang-switcher span:hover,
+.top-banner .lang-switcher span.active { color: var(--gold); }
+
+/* ══════════════════════════════
+   NAVIGATION
+══════════════════════════════ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(18,10,2,0.97);
+  border-bottom: 2px solid var(--crimson-deep);
+  backdrop-filter: blur(16px);
+}
+
+.nav-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.nav-logo-top {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.15rem;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+}
+
+.nav-logo-bottom {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  color: rgba(200,168,75,0.4);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.nav-search {
+  flex: 1;
+  max-width: 400px;
+  position: relative;
+}
+
+.nav-search input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(200,168,75,0.2);
+  padding: 0.55rem 1rem 0.55rem 2.4rem;
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--parchment);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.nav-search input::placeholder { color: rgba(200,168,75,0.3); }
+.nav-search input:focus { border-color: rgba(200,168,75,0.5); }
+
+.nav-search::before {
+  content: '☸';
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(200,168,75,0.35);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+  margin-left: auto;
+}
+
+.nav-links li { position: relative; }
+
+.nav-links > li > a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.65);
+  text-decoration: none;
+  padding: 0 1.3rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold);
+  background: rgba(200,168,75,0.04);
+}
+
+/* ══════════════════════════════
+   HERO — GATE / PORTAL
+══════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-soft);
+}
+
+/* Layered radial atmosphere */
+.hero-atmo {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 50% 50%, rgba(122,21,21,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 0%, rgba(78,12,12,0.4) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(78,12,12,0.3) 0%, transparent 60%);
+}
+
+/* Concentric mandala rings */
+.rings { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(200,168,75,0.07);
+}
+.ring:nth-child(1) { width: 280px; height: 280px; border-color: rgba(200,168,75,0.2); animation: ring-breathe 6s 0s ease-in-out infinite; }
+.ring:nth-child(2) { width: 480px; height: 480px; animation: ring-breathe 6s 0.5s ease-in-out infinite; }
+.ring:nth-child(3) { width: 680px; height: 680px; animation: ring-breathe 6s 1s ease-in-out infinite; }
+.ring:nth-child(4) { width: 900px; height: 900px; animation: ring-breathe 6s 1.5s ease-in-out infinite; }
+.ring:nth-child(5) { width: 1100px; height: 1100px; animation: ring-breathe 6s 2s ease-in-out infinite; }
+.ring:nth-child(6) { width: 1400px; height: 1400px; animation: ring-breathe 6s 2.5s ease-in-out infinite; }
+
+@keyframes ring-breathe {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.015); }
+}
+
+/* Decorative corner ornaments */
+.hero-corner {
+  position: absolute;
+  font-size: 3rem;
+  color: rgba(200,168,75,0.1);
+  line-height: 1;
+}
+.hero-corner.tl { top: 2rem; left: 2rem; }
+.hero-corner.tr { top: 2rem; right: 2rem; transform: scaleX(-1); }
+.hero-corner.bl { bottom: 2rem; left: 2rem; transform: scaleY(-1); }
+.hero-corner.br { bottom: 2rem; right: 2rem; transform: scale(-1); }
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 8rem 2rem 6rem;
+}
+
+.hero-pali {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(200,168,75,0.45);
+  letter-spacing: 0.1em;
+  margin-bottom: 2.5rem;
+  animation: heroFadeUp 1.2s 0.1s both;
+}
+
+.hero-wheel {
+  font-size: 4rem;
+  display: block;
+  color: var(--gold);
+  margin: 0 auto 1.5rem;
+  animation: heroFadeUp 1.2s 0.2s both, spin-gentle 40s linear infinite;
+  line-height: 1;
+}
+
+@keyframes spin-gentle { to { transform: rotate(360deg); } }
+
+.hero-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  animation: heroFadeUp 1.2s 0.3s both;
+  text-shadow: 0 0 60px rgba(200,168,75,0.2);
+}
+
+.hero-title-accent {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  color: var(--gold);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+  animation: heroFadeUp 1.2s 0.4s both;
+  display: block;
+}
+
+.hero-rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  animation: heroFadeUp 1.2s 0.5s both;
+  max-width: 500px;
+}
+
+.hero-rule::before, .hero-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(200,168,75,0.5), transparent);
+}
+
+.hero-rule span { color: var(--gold); font-size: 1rem; }
+
+.hero-desc {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: rgba(247,240,220,0.5);
+  max-width: 580px;
+  margin: 0 auto 3rem;
+  line-height: 1.85;
+  animation: heroFadeUp 1.2s 0.6s both;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin-bottom: 3.5rem;
+  animation: heroFadeUp 1.2s 0.7s both;
+}
+
+.hero-stat { text-align: center; }
+
+.hero-stat-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: var(--gold);
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.hero-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.4);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  animation: heroFadeUp 1.2s 0.85s both;
+}
+
+.btn-enter {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  border: none;
+  padding: 1rem 2.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-enter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold-bright);
+  transform: translateX(-100%);
+  transition: transform 0.3s;
+}
+
+.btn-enter:hover::before { transform: translateX(0); }
+.btn-enter span { position: relative; z-index: 1; }
+.btn-enter:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(200,168,75,0.3); }
+
+.btn-browse {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: transparent;
+  border: 1px solid rgba(200,168,75,0.4);
+  padding: 1rem 2.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.btn-browse:hover { border-color: var(--gold); background: rgba(200,168,75,0.07); }
+
+@keyframes heroFadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ══════════════════════════════
+   SECTION SHARED
+══════════════════════════════ */
+.section-wrap { max-width: 1280px; margin: 0 auto; padding: 0 3rem; }
+
+.s-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.s-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.s-title .accent { color: var(--gold); }
+
+.s-rule {
+  width: 80px; height: 2px;
+  background: linear-gradient(to right, var(--crimson), transparent);
+  margin: 1rem 0 0;
+}
+
+.section-header { margin-bottom: 3.5rem; }
+
+/* ══════════════════════════════
+   TRADITIONS — HORIZONTAL SCROLL
+══════════════════════════════ */
+.traditions-section {
+  padding: 6rem 0;
+  background: linear-gradient(to bottom, var(--ink), var(--ink-soft));
+  border-top: 1px solid rgba(200,168,75,0.1);
+  border-bottom: 1px solid rgba(200,168,75,0.1);
+}
+
+.traditions-scroll {
+  display: flex;
+  gap: 1px;
+  overflow-x: auto;
+  padding: 0 3rem;
+  scrollbar-width: none;
+}
+.traditions-scroll::-webkit-scrollbar { display: none; }
+
+.tradition-card {
+  flex-shrink: 0;
+  width: 260px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(200,168,75,0.1);
+  padding: 2.5rem 1.8rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.tradition-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--crimson);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s;
+}
+
+.tradition-card:hover { background: rgba(200,168,75,0.05); border-color: rgba(200,168,75,0.3); transform: translateY(-6px); }
+.tradition-card:hover::before { transform: scaleX(1); }
+
+.trad-glyph {
+  font-size: 2.8rem;
+  margin-bottom: 1.2rem;
+  display: block;
+  opacity: 0.8;
+}
+
+.trad-origin {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 0.5rem;
+}
+
+.trad-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.trad-pali {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: rgba(200,168,75,0.35);
+  margin-bottom: 1rem;
+}
+
+.trad-desc {
+  font-size: 0.85rem;
+  color: rgba(247,240,220,0.45);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.trad-count {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(200,168,75,0.1);
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: rgba(200,168,75,0.3);
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════
+   SCRIPTURES — CODEX LAYOUT
+══════════════════════════════ */
+.scriptures-section {
+  padding: 7rem 0;
+  background: var(--crimson-deep);
+  position: relative;
+  overflow: hidden;
+}
+
+.scriptures-section::before {
+  content: '卍';
+  position: absolute;
+  font-size: 50vw;
+  right: -10vw;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(0,0,0,0.15);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.scriptures-section .s-title { color: var(--gold-pale); }
+.scriptures-section .s-label { color: rgba(200,168,75,0.5); }
+.scriptures-section .s-rule { background: linear-gradient(to right, var(--gold), transparent); }
+
+.scriptures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(200,168,75,0.08);
+}
+
+.scripture-entry {
+  background: rgba(78,12,12,0.6);
+  padding: 2.2rem 2rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.scripture-entry:hover {
+  background: rgba(122,21,21,0.7);
+  border-color: rgba(200,168,75,0.2);
+  z-index: 1;
+}
+
+.script-vol {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.35);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.script-vol::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: rgba(200,168,75,0.25);
+  display: inline-block;
+}
+
+.script-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--gold-pale);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  line-height: 1.25;
+}
+
+.script-original {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(200,168,75,0.45);
+  margin-bottom: 1rem;
+}
+
+.script-excerpt {
+  font-size: 0.88rem;
+  color: rgba(247,240,220,0.5);
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.script-arrow {
+  position: absolute;
+  bottom: 1.5rem; right: 1.8rem;
+  font-size: 1rem;
+  color: rgba(200,168,75,0.3);
+  transition: all 0.3s;
+}
+
+.scripture-entry:hover .script-arrow {
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+/* ══════════════════════════════
+   TEACHINGS — ACCORDION
+══════════════════════════════ */
+.teachings-section {
+  padding: 7rem 0;
+  background: var(--ink-soft);
+}
+
+.teachings-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.teachings-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.teachings-sidebar-inner {
+  border: 1px solid rgba(200,168,75,0.15);
+  padding: 2.5rem;
+  background: rgba(200,168,75,0.03);
+  position: relative;
+}
+
+.teachings-sidebar-inner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--crimson);
+}
+
+.sidebar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-quote {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--parchment);
+  line-height: 1.75;
+  margin-bottom: 1.2rem;
+}
+
+.sidebar-attr {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.4);
+}
+
+.sidebar-tags {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.5);
+  border: 1px solid rgba(200,168,75,0.15);
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.tag:hover { border-color: var(--gold); color: var(--gold); background: rgba(200,168,75,0.06); }
+
+.teachings-accordion { display: flex; flex-direction: column; gap: 1px; }
+
+.accordion-item {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(200,168,75,0.08);
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.accordion-item.open { border-color: rgba(200,168,75,0.25); }
+
+.accordion-header {
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 50px 1fr 30px;
+  gap: 1.2rem;
+  align-items: center;
+  transition: background 0.3s;
+  user-select: none;
+}
+
+.accordion-header:hover { background: rgba(200,168,75,0.04); }
+.accordion-item.open .accordion-header { background: rgba(122,21,21,0.2); }
+
+.acc-num {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.4rem;
+  color: rgba(200,168,75,0.2);
+  text-align: center;
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.accordion-item.open .acc-num { color: var(--gold-dim); }
+
+.acc-info {}
+
+.acc-category {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--crimson-glow);
+  margin-bottom: 0.3rem;
+}
+
+.acc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: var(--gold-pale);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.acc-pali {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: rgba(200,168,75,0.35);
+  margin-top: 0.2rem;
+}
+
+.acc-chevron {
+  font-size: 0.8rem;
+  color: rgba(200,168,75,0.3);
+  transition: transform 0.3s, color 0.3s;
+  text-align: center;
+}
+
+.accordion-item.open .acc-chevron { transform: rotate(180deg); color: var(--gold); }
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.accordion-item.open .accordion-body { max-height: 600px; }
+
+.accordion-body-inner {
+  padding: 0 2rem 2rem 5.2rem;
+  border-top: 1px solid rgba(200,168,75,0.08);
+  margin: 0 2rem;
+}
+
+.acc-body-text {
+  font-size: 0.95rem;
+  color: rgba(247,240,220,0.6);
+  line-height: 1.85;
+  font-style: italic;
+  padding-top: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.acc-sub-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.acc-sub-points li {
+  font-size: 0.88rem;
+  color: rgba(247,240,220,0.5);
+  padding-left: 1.2rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.acc-sub-points li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  font-size: 0.4rem;
+  color: var(--gold-dim);
+  top: 0.4rem;
+}
+
+.acc-read-more {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s;
+  border-bottom: 1px solid rgba(200,168,75,0.2);
+  padding-bottom: 2px;
+}
+
+.acc-read-more:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* ══════════════════════════════
+   DHAMMA WHEEL — VISUAL BLOCK
+══════════════════════════════ */
+.wheel-section {
+  padding: 7rem 0;
+  background: var(--crimson-deep);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.wheel-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(122,21,21,0.5) 0%, transparent 70%);
+}
+
+.wheel-giant {
+  font-size: clamp(12rem, 30vw, 22rem);
+  color: rgba(0,0,0,0.25);
+  line-height: 1;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation: spin-gentle 80s linear infinite;
+  pointer-events: none;
+}
+
+.wheel-content {
+  position: relative;
+  z-index: 5;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.wheel-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.4);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.wheel-quote {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--gold-pale);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.wheel-quote-marks {
+  font-family: 'IM Fell English', serif;
+  font-size: 5rem;
+  color: rgba(200,168,75,0.15);
+  line-height: 0;
+  vertical-align: -1.5rem;
+  margin-right: 0.2rem;
+}
+
+.wheel-source {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.4);
+}
+
+/* ══════════════════════════════
+   GLOSSARY PREVIEW
+══════════════════════════════ */
+.glossary-section {
+  padding: 7rem 0;
+  background: var(--ink);
+}
+
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(200,168,75,0.06);
+  border: 1px solid rgba(200,168,75,0.1);
+}
+
+.glossary-entry {
+  background: var(--ink-soft);
+  padding: 1.8rem 1.6rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s;
+  border-right: 1px solid rgba(200,168,75,0.06);
+  border-bottom: 1px solid rgba(200,168,75,0.06);
+}
+
+.glossary-entry:hover { background: rgba(122,21,21,0.15); }
+
+.gloss-word {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.gloss-lang {
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: rgba(200,168,75,0.35);
+  margin-bottom: 0.8rem;
+}
+
+.gloss-def {
+  font-size: 0.82rem;
+  color: rgba(247,240,220,0.45);
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.glossary-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* ══════════════════════════════
+   TIMELINE
+══════════════════════════════ */
+.timeline-section {
+  padding: 7rem 0;
+  background: linear-gradient(to bottom, var(--ink-soft), var(--ink));
+  overflow: hidden;
+}
+
+.timeline-track {
+  position: relative;
+  padding: 2rem 0;
+}
+
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(200,168,75,0.3) 10%, rgba(200,168,75,0.3) 90%, transparent);
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  margin-bottom: 3rem;
+  align-items: center;
+}
+
+.timeline-item:nth-child(even) .tl-content-left { order: 3; text-align: left; padding-left: 2.5rem; padding-right: 0; }
+.timeline-item:nth-child(even) .tl-dot { order: 2; }
+.timeline-item:nth-child(even) .tl-content-right { order: 1; text-align: right; padding-right: 2.5rem; padding-left: 0; }
+
+.tl-content-left {
+  text-align: right;
+  padding-right: 2.5rem;
+}
+
+.tl-content-right {
+  text-align: left;
+  padding-left: 2.5rem;
+}
+
+.tl-date {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--crimson-glow);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+.tl-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--gold-pale);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.tl-body {
+  font-size: 0.85rem;
+  color: rgba(247,240,220,0.4);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.tl-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.tl-dot-inner {
+  width: 14px; height: 14px;
+  background: var(--crimson);
+  border: 2px solid var(--gold-dim);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(122,21,21,0.6);
+}
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer {
+  background: var(--crimson-deep);
+  border-top: 1px solid rgba(200,168,75,0.15);
+}
+
+.footer-top {
+  padding: 5rem 3rem 3rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+
+.footer-brand-logo {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.2rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand-tagline {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: rgba(200,168,75,0.3);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.footer-brand-desc {
+  font-size: 0.88rem;
+  color: rgba(247,240,220,0.3);
+  line-height: 1.75;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.footer-col h5 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(200,168,75,0.5);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(200,168,75,0.1);
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+
+.footer-col a {
+  font-size: 0.85rem;
+  color: rgba(247,240,220,0.3);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-style: italic;
+  display: block;
+}
+
+.footer-col a:hover { color: var(--gold); }
+
+.footer-bottom {
+  border-top: 1px solid rgba(200,168,75,0.08);
+  padding: 1.5rem 3rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: rgba(200,168,75,0.25);
+  text-transform: uppercase;
+}
+
+.footer-wheel { font-size: 1.5rem; color: rgba(200,168,75,0.2); }
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media (max-width: 1100px) {
+  .teachings-layout { grid-template-columns: 1fr; }
+  .teachings-sidebar { position: static; }
+  .scriptures-grid { grid-template-columns: 1fr 1fr; }
+  .glossary-grid { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .timeline-track::before { left: 20px; }
+  .timeline-item { grid-template-columns: 40px 1fr; }
+  .tl-content-left { display: none; }
+  .timeline-item:nth-child(even) .tl-content-right { order: 2; }
+  .timeline-item:nth-child(even) .tl-dot { order: 1; }
+  .timeline-item:nth-child(even) .tl-content-left { display: none; }
+}
+
+@media (max-width: 768px) {
+  .nav-inner { gap: 1rem; padding: 0 1.2rem; }
+  .nav-search { display: none; }
+  .nav-links { display: none; }
+  .section-wrap { padding: 0 1.5rem; }
+  .scriptures-grid { grid-template-columns: 1fr; }
+  .glossary-grid { grid-template-columns: 1fr 1fr; }
+  .hero-stats { gap: 1.5rem; }
+  .hero-cta { flex-direction: column; align-items: center; }
+  .footer-top { grid-template-columns: 1fr; }
+  .top-banner { padding: 0.4rem 1.2rem; font-size: 0.55rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BANNER -->
+<div class="top-banner">
+  <span>☸ &nbsp; Namo Tassa Bhagavato Arahato Sammāsambuddhassa</span>
+  <div class="lang-switcher">
+    <span class="active">English</span>
+    <span>Pāli</span>
+    <span>Sanskrit</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-top">Tripiṭaka</span>
+      <span class="nav-logo-bottom">The Buddhist Encyclopedia</span>
+    </a>
+
+    <div class="nav-search">
+      <input type="text" placeholder="Search teachings, texts, terms…">
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#traditions" class="active">Traditions</a></li>
+      <li><a href="#scriptures">Scriptures</a></li>
+      <li><a href="#teachings">Teachings</a></li>
+      <li><a href="#glossary">Glossary</a></li>
+      <li><a href="#history">History</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-atmo"></div>
+  <div class="rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+  <div class="hero-corner tl">❧</div>
+  <div class="hero-corner tr">❧</div>
+  <div class="hero-corner bl">❧</div>
+  <div class="hero-corner br">❧</div>
+
+  <div class="hero-content">
+    <p class="hero-pali">Buddhaṃ Saraṇaṃ Gacchāmi · Dhammaṃ Saraṇaṃ Gacchāmi · Saṅghaṃ Saraṇaṃ Gacchāmi</p>
+
+    <span class="hero-wheel">☸</span>
+
+    <h1 class="hero-title">Tripiṭaka</h1>
+    <span class="hero-title-accent">The Buddhist Encyclopedia</span>
+
+    <div class="hero-rule"><span>✦</span></div>
+
+    <p class="hero-desc">
+      A comprehensive treasury of Buddhist teachings, sacred scriptures, and Dharmic wisdom — spanning Theravāda, Mahāyāna, Vajrayāna, and all schools of the Buddha's doctrine.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Major Traditions</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">84,000</div>
+        <div class="hero-stat-label">Dharma Doors</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2,600+</div>
+        <div class="hero-stat-label">Years of Wisdom</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">500+</div>
+        <div class="hero-stat-label">Texts & Entries</div>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#teachings" class="btn-enter"><span>Enter the Dharma</span></a>
+      <a href="#traditions" class="btn-browse">Browse Traditions</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRADITIONS -->
+<section class="traditions-section" id="traditions">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="s-label">The Three Vehicles</span>
+      <h2 class="s-title">Buddhist <span class="accent">Traditions</span></h2>
+      <div class="s-rule"></div>
+    </div>
+  </div>
+
+  <div class="traditions-scroll">
+    <a href="#" class="tradition-card">
+      <span class="trad-glyph">🪷</span>
+      <div class="trad-origin">South & Southeast Asia</div>
+      <div class="trad-name">Theravāda</div>
+      <div class="trad-pali">थेरवाद · The Elders' Way</div>
+      <p class="trad-desc">The oldest surviving school, preserving the Pāli Canon and emphasizing individual liberation through the Noble Eightfold Path.</p>
+      <div class="trad-count">Pāli Canon · 84,000 suttas</div>
+    </a>
+
+    <a href="#" class="tradition-card">
+      <span class="trad-glyph">☸</span>
+      <div class="trad-origin">East Asia · Central Asia</div>
+      <div class="trad-name">Mahāyāna</div>
+      <div class="trad-pali">महायान · The Great Vehicle</div>
+      <p class="trad-desc">Emphasizing the Bodhisattva path — the aspiration to attain Buddhahood for the benefit of all sentient beings.</p>
+      <div class="trad-count">Sanskrit Canon · Countless Sūtras</div>
+    </a>
+
+    <a href="#" class="tradition-card">
+      <span class="trad-glyph">🔔</span>
+      <div class="trad-origin">Tibet · Nepal · Mongolia</div>
+      <div class="trad-name">Vajrayāna</div>
+      <div class="trad-pali">वज्रयान · The Diamond Vehicle</div>
+      <p class="trad-desc">Tantric Buddhism employing rituals, mantra, mandala, and deity yoga to achieve rapid enlightenment within one lifetime.</p>
+      <div class="trad-count">Kangyur & Tengyur</div>
+    </a>
+
+    <a href="#" class="tradition-card">
+      <span class="trad-glyph">🎋</span>
+      <div class="trad-origin">China · Japan · Korea</div>
+      <div class="trad-name">Zen / Chan</div>
+      <div class="trad-pali">禪 · Meditation School</div>
+      <p class="trad-desc">A Mahāyāna school emphasizing direct insight through meditation, kōan practice, and mind-to-mind transmission from master to student.</p>
+      <div class="trad-count">Platform Sūtra · Blue Cliff Record</div>
+    </a>
+
+    <a href="#" class="tradition-card">
+      <span class="trad-glyph">🙏</span>
+      <div class="trad-origin">Japan · China</div>
+      <div class="trad-name">Pure Land</div>
+      <div class="trad-pali">淨土宗 · Jōdo-shū</div>
+      <p class="trad-desc">Devotional Buddhism centred on rebirth in Amitābha Buddha's Pure Land through recitation of the Nembutsu.</p>
+      <div class="trad-count">Larger & Smaller Sukhāvatīvyūha</div>
+    </a>
+
+    <a href="#" class="tradition-card">
+      <span class="trad-glyph">🌸</span>
+      <div class="trad-origin">Japan</div>
+      <div class="trad-name">Nichiren</div>
+      <div class="trad-pali">日蓮宗 · Nichiren-shū</div>
+      <p class="trad-desc">Founded by the monk Nichiren, centred on the Lotus Sūtra and the chanting of Nam Myōhō Renge Kyō.</p>
+      <div class="trad-count">Lotus Sūtra</div>
+    </a>
+  </div>
+</section>
+
+<!-- SCRIPTURES -->
+<section class="scriptures-section" id="scriptures">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="s-label">The Sacred Canon</span>
+      <h2 class="s-title">Buddhist <span class="accent">Scriptures</span></h2>
+      <div class="s-rule"></div>
+    </div>
+
+    <div class="scriptures-grid">
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Khuddaka Nikāya · Theravāda</div>
+        <div class="script-name">Dhammapada</div>
+        <div class="script-original">ධම්මපද — Verses of the Dhamma</div>
+        <p class="script-excerpt">423 verses of condensed Buddhist wisdom arranged in 26 chapters, from the mind as forerunner of all actions to the awakened sage walking the path.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Prajñāpāramitā · Mahāyāna</div>
+        <div class="script-name">Heart Sūtra</div>
+        <div class="script-original">Prajñāpāramitāhṛdayasūtra</div>
+        <p class="script-excerpt">The most recited scripture in Mahāyāna Buddhism — 260 characters distilling the entire Perfection of Wisdom. Form is emptiness; emptiness is form.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Prajñāpāramitā · Mahāyāna</div>
+        <div class="script-name">Diamond Sūtra</div>
+        <div class="script-original">Vajracchedikā Prajñāpāramitā</div>
+        <p class="script-excerpt">A dialogue between the Buddha and Subhuti on the nature of the Bodhisattva path and non-attachment to concepts and forms.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Nikāya · Theravāda</div>
+        <div class="script-name">Satipaṭṭhāna Sutta</div>
+        <div class="script-original">Mahāsatipaṭṭhāna Sutta</div>
+        <p class="script-excerpt">The discourse on the four foundations of mindfulness — declared by the Buddha the direct path for the purification of beings and the overcoming of grief.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Kangyur · Vajrayāna</div>
+        <div class="script-name">Bardo Thodol</div>
+        <div class="script-original">བར་དོ་ཐོས་གྲོལ — Tibetan Book of the Dead</div>
+        <p class="script-excerpt">Attributed to Padmasambhava, this text guides the consciousness through the intermediate state between death and rebirth, read aloud for the dying.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Saddharmapuṇḍarīka · Mahāyāna</div>
+        <div class="script-name">Lotus Sūtra</div>
+        <div class="script-original">Saddharmapuṇḍarīkasūtra</div>
+        <p class="script-excerpt">One of the most influential Mahāyāna texts, teaching the concept of upāya (skillful means) and the universal potential for Buddhahood in all beings.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Khuddaka Nikāya · Theravāda</div>
+        <div class="script-name">Metta Sutta</div>
+        <div class="script-original">Karaṇīyamettā Sutta</div>
+        <p class="script-excerpt">The Buddha's discourse on loving-kindness — a sublime instruction to cultivate boundless goodwill toward all living beings without exception.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Nikāya · Theravāda</div>
+        <div class="script-name">Dhammacakkappavattana</div>
+        <div class="script-original">Setting the Wheel of Dhamma in Motion</div>
+        <p class="script-excerpt">The first discourse delivered by the Buddha at Deer Park, Varanasi — teaching the Four Noble Truths and the Middle Way to the five ascetics.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+      <a href="#" class="scripture-entry">
+        <div class="script-vol">Zen · Mahāyāna</div>
+        <div class="script-name">Platform Sūtra</div>
+        <div class="script-original">Liùzǔ Tánjīng — 六祖壇經</div>
+        <p class="script-excerpt">The only Chinese text to receive the title "sūtra" — the recorded teachings and autobiography of Huineng, Sixth Patriarch of Chan Buddhism.</p>
+        <span class="script-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- TEACHINGS ACCORDION -->
+<section class="teachings-section" id="teachings">
+  <div class="section-wrap">
+    <div class="teachings-layout">
+
+      <div class="teachings-sidebar">
+        <div class="teachings-sidebar-inner">
+          <div class="sidebar-title">A Teaching</div>
+          <p class="sidebar-quote">"All conditioned things are impermanent — when one sees this with wisdom, one turns away from suffering. This is the path to purification."</p>
+          <p class="sidebar-attr">— Dhammapada 277, Pāli Canon</p>
+
+          <div class="sidebar-tags">
+            <a href="#" class="tag">Theravāda</a>
+            <a href="#" class="tag">Mahāyāna</a>
+            <a href="#" class="tag">Vajrayāna</a>
+            <a href="#" class="tag">Karma</a>
+            <a href="#" class="tag">Nibbāna</a>
+            <a href="#" class="tag">Dependent Origination</a>
+            <a href="#" class="tag">Anattā</a>
+            <a href="#" class="tag">Sīla</a>
+            <a href="#" class="tag">Samādhi</a>
+            <a href="#" class="tag">Paññā</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-header">
+          <span class="s-label">The Dhamma</span>
+          <h2 class="s-title">Core <span class="accent">Teachings</span></h2>
+          <div class="s-rule"></div>
+        </div>
+
+        <div class="teachings-accordion" id="accordion">
+
+          <div class="accordion-item open">
+            <div class="accordion-header" onclick="toggleAcc(this)">
+              <div class="acc-num">I</div>
+              <div class="acc-info">
+                <div class="acc-category">Cattāri Ariyasaccāni</div>
+                <div class="acc-title">The Four Noble Truths</div>
+                <div class="acc-pali">Cattāri Ariyasaccāni — Pāli Canon</div>
+              </div>
+              <div class="acc-chevron">▾</div>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-body-inner">
+                <p class="acc-body-text">The Four Noble Truths form the Buddha's first and most fundamental teaching, delivered at Deer Park in Varanasi. They constitute a complete diagnosis of the human condition and a prescription for liberation — modelled on the ancient Indian medical framework of identifying a disease, its cause, prognosis, and cure.</p>
+                <ul class="acc-sub-points">
+                  <li><strong>Dukkha</strong> — The truth of suffering: life is permeated by unsatisfactoriness, from gross pain to subtle dissatisfaction</li>
+                  <li><strong>Samudāya</strong> — The origin of suffering: craving (taṇhā) arising from ignorance is the root cause</li>
+                  <li><strong>Nirodha</strong> — The cessation of suffering: complete liberation is possible — this is Nibbāna</li>
+                  <li><strong>Magga</strong> — The path: the Noble Eightfold Path leads to the cessation of suffering</li>
+                </ul>
+                <a href="#" class="acc-read-more">Read full entry →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAcc(this)">
+              <div class="acc-num">II</div>
+              <div class="acc-info">
+                <div class="acc-category">Ariyo Aṭṭhaṅgiko Maggo</div>
+                <div class="acc-title">The Noble Eightfold Path</div>
+                <div class="acc-pali">Ariyo Aṭṭhaṅgiko Maggo</div>
+              </div>
+              <div class="acc-chevron">▾</div>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-body-inner">
+                <p class="acc-body-text">The Noble Eightfold Path is the practical prescription for ending suffering — the fourth of the Four Noble Truths. Grouped into three divisions of wisdom (paññā), ethical conduct (sīla), and mental cultivation (samādhi), it provides a complete guide to liberation.</p>
+                <ul class="acc-sub-points">
+                  <li><strong>Sammā Diṭṭhi</strong> — Right Understanding: seeing reality as it is, particularly the Four Noble Truths</li>
+                  <li><strong>Sammā Saṅkappa</strong> — Right Intention: renunciation, non-ill-will, non-cruelty</li>
+                  <li><strong>Sammā Vācā</strong> — Right Speech: truthful, harmonious, gentle, meaningful</li>
+                  <li><strong>Sammā Kammanta</strong> — Right Action: abstaining from killing, stealing, sexual misconduct</li>
+                  <li><strong>Sammā Ājīva</strong> — Right Livelihood: earning a living in a harmless, honest way</li>
+                  <li><strong>Sammā Vāyāma</strong> — Right Effort: cultivating wholesome states, abandoning unwholesome ones</li>
+                  <li><strong>Sammā Sati</strong> — Right Mindfulness: clear awareness of body, feelings, mind, and phenomena</li>
+                  <li><strong>Sammā Samādhi</strong> — Right Concentration: the four jhānas of meditative absorption</li>
+                </ul>
+                <a href="#" class="acc-read-more">Read full entry →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAcc(this)">
+              <div class="acc-num">III</div>
+              <div class="acc-info">
+                <div class="acc-category">Tilakkhaṇa</div>
+                <div class="acc-title">The Three Marks of Existence</div>
+                <div class="acc-pali">Anicca · Dukkha · Anattā</div>
+              </div>
+              <div class="acc-chevron">▾</div>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-body-inner">
+                <p class="acc-body-text">The Three Marks of Existence (tilakkhaṇa) are three characteristics that the Buddha declared to be present in all conditioned phenomena. Insight into these three characteristics is central to the path of liberation in all Buddhist traditions.</p>
+                <ul class="acc-sub-points">
+                  <li><strong>Anicca</strong> (Impermanence) — All conditioned things are in a constant state of flux and change; nothing lasts</li>
+                  <li><strong>Dukkha</strong> (Unsatisfactoriness) — Because of impermanence, clinging to what is impermanent leads to suffering</li>
+                  <li><strong>Anattā</strong> (Non-self) — There is no permanent, unchanging self or soul in any conditioned phenomenon</li>
+                </ul>
+                <a href="#" class="acc-read-more">Read full entry →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAcc(this)">
+              <div class="acc-num">IV</div>
+              <div class="acc-info">
+                <div class="acc-category">Paṭicca-samuppāda</div>
+                <div class="acc-title">Dependent Origination</div>
+                <div class="acc-pali">Imasmiṃ sati idaṃ hoti — This being, that arises</div>
+              </div>
+              <div class="acc-chevron">▾</div>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-body-inner">
+                <p class="acc-body-text">Paṭicca-samuppāda — Dependent Origination — is one of the most profound and central teachings in all of Buddhism. It describes the twelve-linked chain of causation that perpetuates the cycle of rebirth (saṃsāra) and explains how suffering arises and ceases.</p>
+                <ul class="acc-sub-points">
+                  <li>With ignorance (avijjā) as condition, volitional formations (saṅkhāra) arise</li>
+                  <li>With formations as condition, consciousness (viññāṇa) arises</li>
+                  <li>The chain continues through name-and-form, the six sense bases, contact, feeling, craving, clinging, becoming, birth</li>
+                  <li>With birth as condition: aging, death, sorrow, lamentation, pain, grief and despair arise</li>
+                </ul>
+                <a href="#" class="acc-read-more">Read full entry →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAcc(this)">
+              <div class="acc-num">V</div>
+              <div class="acc-info">
+                <div class="acc-category">Kamma</div>
+                <div class="acc-title">Karma & Intentional Action</div>
+                <div class="acc-pali">Cetanāhaṃ bhikkhave kammaṃ vadāmi — Intention, monks, is what I call karma</div>
+              </div>
+              <div class="acc-chevron">▾</div>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-body-inner">
+                <p class="acc-body-text">In Buddhism, kamma (Sanskrit: karma) refers specifically to intentional action — mental, verbal, or physical — and its potential to bear fruit (kammavipāka) in the future. The Buddha radically redefined the Brahmanical concept by placing intention at the center.</p>
+                <ul class="acc-sub-points">
+                  <li>Wholesome kamma (kusala): actions rooted in non-greed, non-hatred, and non-delusion</li>
+                  <li>Unwholesome kamma (akusala): actions rooted in greed (lobha), hatred (dosa), or delusion (moha)</li>
+                  <li>Null kamma: actions that generate no kammic fruit, e.g. actions of an Arahant</li>
+                </ul>
+                <a href="#" class="acc-read-more">Read full entry →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAcc(this)">
+              <div class="acc-num">VI</div>
+              <div class="acc-info">
+                <div class="acc-category">Nibbāna / Nirvāṇa</div>
+                <div class="acc-title">Liberation & the Unconditioned</div>
+                <div class="acc-pali">Atthi bhikkhave ajātaṃ abhūtaṃ akataṃ asaṅkhataṃ</div>
+              </div>
+              <div class="acc-chevron">▾</div>
+            </div>
+            <div class="accordion-body">
+              <div class="accordion-body-inner">
+                <p class="acc-body-text">Nibbāna (Sanskrit: Nirvāṇa) is the supreme goal of Buddhist practice — the complete extinguishing of craving, aversion, and delusion, and the cessation of the entire mass of suffering. The Buddha described it as the unconditioned, the unborn, the unbecome, the unmade.</p>
+                <ul class="acc-sub-points">
+                  <li>Nibbāna with remainder (sa-upādisesa-nibbāna): liberation attained while still alive — the Arahant</li>
+                  <li>Nibbāna without remainder (anupādisesa-nibbāna): liberation at the death of the Arahant — Parinibbāna</li>
+                </ul>
+                <a href="#" class="acc-read-more">Read full entry →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHEEL QUOTE -->
+<section class="wheel-section">
+  <div class="wheel-giant">☸</div>
+  <div class="wheel-content">
+    <span class="wheel-label">From the Dhammapada</span>
+    <p class="wheel-quote">
+      <span class="wheel-quote-marks">"</span>Mind is the forerunner of all actions. All deeds are led by mind, created by mind. If one speaks or acts with a corrupt mind, suffering follows, as the wheel follows the hoof of an ox.
+    </p>
+    <p class="wheel-source">— Dhammapada, Verse 1 · Yamakavagga</p>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section class="glossary-section" id="glossary">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="s-label">Pāli & Sanskrit</span>
+      <h2 class="s-title">Dharma <span class="accent">Glossary</span></h2>
+      <div class="s-rule"></div>
+    </div>
+
+    <div class="glossary-grid">
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Ānāpānasati</div>
+        <div class="gloss-lang">Pāli · Mindfulness of breathing</div>
+        <p class="gloss-def">Meditation on the breath as the primary object of mindfulness — the most direct path to calming the mind and developing jhāna.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Bodhicitta</div>
+        <div class="gloss-lang">Sanskrit · Awakening mind</div>
+        <p class="gloss-def">The altruistic intention to attain Buddhahood for the benefit of all sentient beings — the defining aspiration of the Bodhisattva.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Dukkha</div>
+        <div class="gloss-lang">Pāli · Suffering / unsatisfactoriness</div>
+        <p class="gloss-def">The first of the Three Marks of Existence — encompasses suffering, dissatisfaction, imperfection, and the unsatisfactory nature of conditioned phenomena.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Śūnyatā</div>
+        <div class="gloss-lang">Sanskrit · Emptiness</div>
+        <p class="gloss-def">The central Mahāyāna teaching that all phenomena are empty of inherent self-existence — they arise dependently, without independent, fixed essence.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Upāya</div>
+        <div class="gloss-lang">Sanskrit · Skillful means</div>
+        <p class="gloss-def">The ability to adapt the Buddha's teaching to the needs and capacities of different beings — a key concept in Mahāyāna doctrine.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Tathāgatagarbha</div>
+        <div class="gloss-lang">Sanskrit · Buddha-nature</div>
+        <p class="gloss-def">The innate Buddha-nature present in all sentient beings — the seed of awakening that awaits recognition and cultivation.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Prajñā</div>
+        <div class="gloss-lang">Sanskrit · Wisdom</div>
+        <p class="gloss-def">Insight wisdom — direct understanding of the three characteristics of existence, culminating in the penetration of Nirvāṇa.</p>
+      </a>
+      <a href="#" class="glossary-entry">
+        <div class="gloss-word">Saṅgha</div>
+        <div class="gloss-lang">Pāli/Sanskrit · Community</div>
+        <p class="gloss-def">The community of Buddhist practitioners — one of the Three Jewels. In the highest sense: the assembly of Noble Ones who have attained liberation.</p>
+      </a>
+    </div>
+
+    <div class="glossary-cta">
+      <a href="#" class="btn-browse">View Full Glossary (400+ Terms)</a>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY TIMELINE -->
+<section class="timeline-section" id="history">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="s-label">2600 Years</span>
+      <h2 class="s-title">History of <span class="accent">Buddhism</span></h2>
+      <div class="s-rule"></div>
+    </div>
+  </div>
+
+  <div class="section-wrap">
+    <div class="timeline-track">
+
+      <div class="timeline-item">
+        <div class="tl-content-left">
+          <div class="tl-date">c. 563–483 BCE</div>
+          <div class="tl-title">Birth & Enlightenment of the Buddha</div>
+          <p class="tl-body">Siddhārtha Gautama attains supreme enlightenment under the Bodhi tree at Bodh Gayā and begins teaching the Dhamma.</p>
+        </div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content-right"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-content-left"></div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content-right">
+          <div class="tl-date">c. 483 BCE</div>
+          <div class="tl-title">First Buddhist Council</div>
+          <p class="tl-body">500 Arahants convene at Rājagaha after the Buddha's Parinibbāna to recite and preserve the Dhamma and Vinaya.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-content-left">
+          <div class="tl-date">c. 268–232 BCE</div>
+          <div class="tl-title">Emperor Aśoka's Patronage</div>
+          <p class="tl-body">The Mauryan Emperor Aśoka converts to Buddhism and sends missionaries across Asia, inscribing Dharma edicts on pillars across his empire.</p>
+        </div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content-right"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-content-left"></div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content-right">
+          <div class="tl-date">c. 1st Century CE</div>
+          <div class="tl-title">Rise of Mahāyāna Buddhism</div>
+          <p class="tl-body">New sūtras appear, expanding the scope of liberation to all beings — the Bodhisattva ideal becomes central to a new movement.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-content-left">
+          <div class="tl-date">7th–8th Century CE</div>
+          <div class="tl-title">Vajrayāna in Tibet</div>
+          <p class="tl-body">Padmasambhava introduces tantric Buddhism to Tibet, founding the Nyingma school. The Tibetan Canon begins to be compiled.</p>
+        </div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content-right"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-content-left"></div>
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-content-right">
+          <div class="tl-date">19th–20th Century</div>
+          <div class="tl-title">Buddhism Comes to the West</div>
+          <p class="tl-body">Through colonial scholarship, emigration, and figures like D.T. Suzuki and Thich Nhat Hanh, Buddhism takes root across Europe and the Americas.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-logo">Tripiṭaka</div>
+      <div class="footer-brand-tagline">The Buddhist Encyclopedia</div>
+      <p class="footer-brand-desc">A comprehensive digital treasury of Buddhist teachings, sacred scriptures, and Dharmic wisdom — freely offered for the benefit of all beings who walk the path.</p>
+      <div style="font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.1em; color:rgba(200,168,75,0.25);">
+        Buddhaṃ Dhammaṃ Saṅghaṃ Saraṇaṃ Gacchāmi
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Traditions</h5>
+      <ul>
+        <li><a href="#">Theravāda</a></li>
+        <li><a href="#">Mahāyāna</a></li>
+        <li><a href="#">Vajrayāna</a></li>
+        <li><a href="#">Zen Buddhism</a></li>
+        <li><a href="#">Pure Land</a></li>
+        <li><a href="#">Nichiren</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Scriptures</h5>
+      <ul>
+        <li><a href="#">Pāli Canon</a></li>
+        <li><a href="#">Chinese Canon</a></li>
+        <li><a href="#">Tibetan Canon</a></li>
+        <li><a href="#">Dhammapada</a></li>
+        <li><a href="#">Heart Sūtra</a></li>
+        <li><a href="#">Lotus Sūtra</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Teachings</h5>
+      <ul>
+        <li><a href="#">Four Noble Truths</a></li>
+        <li><a href="#">Eightfold Path</a></li>
+        <li><a href="#">Dependent Origination</a></li>
+        <li><a href="#">Three Marks</a></li>
+        <li><a href="#">Five Aggregates</a></li>
+        <li><a href="#">Karma & Rebirth</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#">Full Glossary</a></li>
+        <li><a href="#">Reading Lists</a></li>
+        <li><a href="#">Timeline</a></li>
+        <li><a href="#">Sacred Sites</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Tripiṭaka Encyclopedia · May all beings be happy, peaceful, and free from suffering</span>
+    <span class="footer-wheel">☸</span>
+    <span>Sabbe Sattā Sukhitā Hontu</span>
+  </div>
+</footer>
+
+<script>
+  // Accordion
+  function toggleAcc(header) {
+    const item = header.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.accordion-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Nav active state on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+
+  // Smooth entrance animation on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.tradition-card, .scripture-entry, .glossary-entry, .timeline-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
