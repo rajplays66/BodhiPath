@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BodhiPath — Walk the Path of Awakening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0a0c0a;
+  --bg2:       #0f120f;
+  --bg3:       #131813;
+  --surface:   #161d16;
+  --surface2:  #1c251c;
+  --border:    rgba(163,230,53,0.1);
+  --border2:   rgba(163,230,53,0.2);
+  --lime:      #a3e635;
+  --lime-dim:  #6b9e1a;
+  --lime-glow: rgba(163,230,53,0.15);
+  --lime-soft: rgba(163,230,53,0.07);
+  --text:      #e8f0e8;
+  --text-dim:  #7a907a;
+  --text-mid:  #b0c8b0;
+  --white:     #f0f7f0;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Subtle scan-line texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--lime-dim); }
+
+/* ═══════════════════════════
+   NAV
+═══════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  background: rgba(10,12,10,0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  height: 64px;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-logo-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(163,230,53,0.4));
+  animation: logo-pulse 4s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%,100% { filter: drop-shadow(0 0 6px rgba(163,230,53,0.3)); }
+  50%      { filter: drop-shadow(0 0 14px rgba(163,230,53,0.6)); }
+}
+
+.nav-logo-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+
+.nav-logo-text span { color: var(--lime); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  list-style: none;
+}
+
+.nav-links li { position: relative; }
+
+.nav-links > li > a {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 0.5rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.nav-links > li > a:hover,
+.nav-links > li > a.active {
+  color: var(--lime);
+  background: var(--lime-soft);
+}
+
+/* Dropdown arrow */
+.nav-links .has-dropdown > a::after {
+  content: '▾';
+  font-size: 0.65rem;
+  opacity: 0.5;
+  transition: transform 0.2s;
+}
+
+.nav-links .has-dropdown:hover > a::after { transform: rotate(180deg); }
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: all 0.25s;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(163,230,53,0.05);
+}
+
+.has-dropdown:hover .dropdown {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.9rem;
+  text-decoration: none;
+  border-radius: 7px;
+  transition: background 0.2s;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-mid);
+}
+
+.dropdown a:hover { background: var(--lime-soft); color: var(--lime); }
+
+.dropdown a .d-icon { font-size: 1rem; opacity: 0.7; }
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.4rem 0;
+}
+
+.nav-cta {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--bg);
+  background: var(--lime);
+  border: none;
+  padding: 0.55rem 1.3rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px rgba(163,230,53,0.2);
+}
+
+.nav-cta:hover {
+  background: #bef264;
+  box-shadow: 0 0 30px rgba(163,230,53,0.4);
+  transform: translateY(-1px);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--lime);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ═══════════════════════════
+   PAGE SECTIONS (shown/hidden)
+═══════════════════════════ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════
+   HOME — HERO
+═══════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 8rem 2rem 5rem;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 40%, rgba(163,230,53,0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 20% 80%, rgba(163,230,53,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 80% 10%, rgba(163,230,53,0.02) 0%, transparent 60%);
+}
+
+/* Animated grid */
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(163,230,53,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(163,230,53,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
+}
+
+.hero-content {
+  max-width: 820px;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lime);
+  border: 1px solid var(--border2);
+  background: var(--lime-soft);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.8s 0.1s both;
+}
+
+.hero-eyebrow::before { content: '◆'; font-size: 0.5rem; }
+
+.hero-logo-big {
+  font-size: 5rem;
+  display: block;
+  margin: 0 auto 1rem;
+  animation: fadeUp 0.8s 0.2s both, float 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(163,230,53,0.3));
+  line-height: 1;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.4rem;
+  animation: fadeUp 0.8s 0.3s both;
+}
+
+.hero-title .lime { color: var(--lime); }
+
+.hero-sub {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  animation: fadeUp 0.8s 0.4s both;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--text-mid);
+  line-height: 1.85;
+  max-width: 560px;
+  margin: 0 auto 3rem;
+  animation: fadeUp 0.8s 0.5s both;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.6s both;
+}
+
+.btn-lime {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--bg);
+  background: var(--lime);
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+  box-shadow: 0 0 24px rgba(163,230,53,0.25);
+}
+
+.btn-lime:hover {
+  background: #bef264;
+  box-shadow: 0 0 40px rgba(163,230,53,0.45);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--lime);
+  background: transparent;
+  border: 1px solid var(--border2);
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+
+.btn-ghost:hover { border-color: var(--lime); background: var(--lime-soft); }
+
+/* Stats bar */
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+  animation: fadeUp 0.8s 0.8s both;
+  flex-wrap: wrap;
+}
+
+.stat { text-align: center; }
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--lime);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════
+   HOME — FEATURES
+═══════════════════════════ */
+.features {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sec-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lime);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.sec-tag::before { content: '//'; opacity: 0.5; }
+
+.sec-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+.sec-title .lime { color: var(--lime); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px;
+  margin-top: 3.5rem;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.feature-card {
+  background: var(--surface);
+  padding: 2.5rem 2rem;
+  transition: background 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+.feature-card:hover { background: var(--surface2); }
+
+.feat-icon {
+  font-size: 2rem;
+  margin-bottom: 1.2rem;
+  display: block;
+  line-height: 1;
+}
+
+.feat-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+}
+
+.feat-desc {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.feat-link {
+  margin-top: 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--lime-dim);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.feature-card:hover .feat-link { color: var(--lime); gap: 0.5rem; }
+
+/* ═══════════════════════════
+   HOME — QUOTE BLOCK
+═══════════════════════════ */
+.quote-block {
+  padding: 5rem 2rem;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.quote-mark {
+  font-size: 6rem;
+  color: var(--lime);
+  opacity: 0.15;
+  font-family: 'Lora', serif;
+  line-height: 0.5;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.quote-text {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  color: var(--text);
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.65;
+}
+
+.quote-source {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lime-dim);
+}
+
+/* ═══════════════════════════
+   ARTICLES PAGE
+═══════════════════════════ */
+.page-hero {
+  padding: 9rem 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-hero-label::before { content: '◆'; font-size: 0.45rem; }
+
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.page-title .lime { color: var(--lime); }
+
+.page-desc {
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  max-width: 550px;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+/* Articles grid */
+.articles-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.article-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.article-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(163,230,53,0.08);
+}
+
+.article-thumb {
+  height: 180px;
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.article-thumb-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(163,230,53,0.06) 0%, transparent 70%);
+}
+
+.article-body { padding: 1.5rem; }
+
+.article-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.8rem;
+}
+
+.a-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime-dim);
+  background: var(--lime-soft);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.article-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.35;
+  margin-bottom: 0.6rem;
+}
+
+.article-excerpt {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-style: italic;
+  margin-bottom: 1.2rem;
+}
+
+.article-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════
+   SUTTRAS PAGE
+═══════════════════════════ */
+.suttras-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/* Category tabs */
+.sutra-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sutra-tab {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.55rem 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.sutra-tab:hover { color: var(--lime); border-color: var(--border2); }
+.sutra-tab.active { color: var(--bg); background: var(--lime); border-color: var(--lime); }
+
+/* Sutra collection */
+.sutra-collection { display: none; }
+.sutra-collection.active { display: block; }
+
+.collection-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  border-left: 3px solid var(--lime);
+}
+
+.col-icon { font-size: 3rem; line-height: 1; flex-shrink: 0; }
+
+.col-info {}
+
+.col-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.col-pali {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--lime-dim);
+  margin-bottom: 0.7rem;
+}
+
+.col-desc {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-style: italic;
+}
+
+/* Individual sutra entries */
+.sutra-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.sutra-entry {
+  background: var(--surface);
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.sutra-entry:hover { background: var(--surface2); }
+
+.sutra-entry-header {
+  padding: 1.5rem 1.8rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 44px 1fr 36px;
+  gap: 1rem;
+  align-items: center;
+  user-select: none;
+}
+
+.sutra-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--lime-dim);
+  opacity: 0.6;
+  text-align: center;
+}
+
+.sutra-info {}
+
+.sutra-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.2rem;
+}
+
+.sutra-original {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.sutra-chevron {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--lime-dim);
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+
+.sutra-entry.open .sutra-chevron {
+  background: var(--lime);
+  color: var(--bg);
+  border-color: var(--lime);
+  transform: rotate(180deg);
+}
+
+.sutra-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.sutra-entry.open .sutra-body { max-height: 800px; }
+
+.sutra-body-inner {
+  padding: 0 1.8rem 2rem calc(44px + 2.8rem);
+  border-top: 1px solid var(--border);
+}
+
+.sutra-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lime-dim);
+  margin: 1.5rem 0 0.6rem;
+}
+
+.sutra-text {
+  font-size: 0.92rem;
+  color: var(--text-mid);
+  line-height: 1.9;
+  font-style: italic;
+  margin-bottom: 1.2rem;
+}
+
+.sutra-verse {
+  background: var(--bg3);
+  border-left: 2px solid var(--lime);
+  padding: 1rem 1.2rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 1rem;
+}
+
+.sutra-verse p {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.85;
+}
+
+.sutra-verse cite {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--lime-dim);
+  font-style: normal;
+}
+
+.sutra-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--bg);
+  background: var(--lime);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.sutra-read-btn:hover { background: #bef264; }
+
+/* ═══════════════════════════
+   CONTACT PAGE
+═══════════════════════════ */
+.contact-wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+}
+
+.contact-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2.5rem;
+  margin-top: 2rem;
+}
+
+.form-group { margin-bottom: 1.5rem; }
+
+.form-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lime-dim);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.8rem 1rem;
+  font-family: 'Lora', serif;
+  font-size: 0.92rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: none;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--text-dim); font-style: italic; }
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--lime-dim);
+  box-shadow: 0 0 0 3px rgba(163,230,53,0.08);
+}
+
+.form-textarea { height: 140px; }
+
+.form-select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.8rem 1rem;
+  font-family: 'Lora', serif;
+  font-size: 0.92rem;
+  color: var(--text);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-select option { background: var(--bg2); }
+
+.contact-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.contact-card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+.contact-card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.3rem;
+}
+.contact-card-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  color: var(--lime);
+  font-weight: 600;
+}
+
+/* ═══════════════════════════
+   FOOTER
+═══════════════════════════ */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 3rem 2rem 1.5rem;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+.footer-brand-name {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+}
+
+.footer-brand-name span { color: var(--lime); }
+.footer-brand-name .f-icon { font-size: 1.4rem; }
+
+.footer-brand-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.footer-col h5 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 1rem;
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+
+.footer-col a {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.footer-col a:hover { color: var(--lime); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════
+   MOBILE MENU
+═══════════════════════════ */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  z-index: 499;
+  padding: 1.5rem 2rem;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.mobile-menu.open { display: flex; }
+
+.mobile-menu a {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-decoration: none;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.mobile-menu a:hover { color: var(--lime); }
+.mobile-menu a:last-child { border-bottom: none; }
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media (max-width: 900px) {
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .sutra-body-inner { padding-left: 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .articles-grid { grid-template-columns: 1fr; }
+  .contact-info { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .hero-stats { gap: 1.5rem; }
+  .collection-header { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" onclick="showPage('home')">
+      <span class="nav-logo-icon">☯︎</span>
+      <span class="nav-logo-text">Bodhi<span>Path</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
+      <li><a onclick="showPage('articles')" id="nav-articles">Articles</a></li>
+      <li class="has-dropdown">
+        <a id="nav-suttras">Suttras ▾</a>
+        <div class="dropdown">
+          <a onclick="showSutra('ratana')"><span class="d-icon">💎</span> Ratana Sutta</a>
+          <a onclick="showSutra('metta')"><span class="d-icon">💛</span> Metta Sutta</a>
+          <div class="dropdown-divider"></div>
+          <a onclick="showSutra('maitri')"><span class="d-icon">🙏</span> Maitri Sutra</a>
+          <a onclick="showSutra('prajnaparamita')"><span class="d-icon">📿</span> Prajnaparamita</a>
+          <div class="dropdown-divider"></div>
+          <a onclick="showSutra('dhammapada')"><span class="d-icon">☸</span> Dhammapada</a>
+          <a onclick="showSutra('satipattana')"><span class="d-icon">🧘</span> Satipaṭṭhāna</a>
+        </div>
+      </li>
+      <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+    </ul>
+
+    <a class="nav-cta" onclick="showPage('suttras')">Browse Suttras</a>
+
+    <div class="hamburger" onclick="toggleMobile()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showPage('home'); toggleMobile()">Home</a>
+  <a onclick="showPage('articles'); toggleMobile()">Articles</a>
+  <a onclick="showPage('suttras'); toggleMobile()">Suttras</a>
+  <a onclick="showPage('contact'); toggleMobile()">Contact</a>
+</div>
+
+<!-- ════════════════════
+     HOME PAGE
+════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">The Path of Awakening</div>
+
+      <span class="hero-logo-big">☯︎</span>
+
+      <h1 class="hero-title">Bodhi<span class="lime">Path</span></h1>
+      <p class="hero-sub">Walk the Dhamma. Find the Light Within.</p>
+
+      <p class="hero-desc">
+        A complete digital encyclopedia of Buddhist teachings, sacred suttras, and timeless wisdom — freely offered for every seeker on the path.
+      </p>
+
+      <div class="hero-btns">
+        <a class="btn-lime" onclick="showPage('suttras')">Browse Suttras</a>
+        <a class="btn-ghost" onclick="showPage('articles')">Read Articles</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">84,000</div>
+          <div class="stat-label">Dharma Doors</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2,600+</div>
+          <div class="stat-label">Years of Wisdom</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Major Traditions</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">Free</div>
+          <div class="stat-label">Always & Forever</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="sec-tag">What's Inside</div>
+    <h2 class="sec-title">Everything on the <span class="lime">Path</span></h2>
+
+    <div class="features-grid">
+      <a class="feature-card" onclick="showPage('suttras')">
+        <span class="feat-icon">📜</span>
+        <div class="feat-title">Suttras & Scriptures</div>
+        <p class="feat-desc">Ratana, Metta, Maitri, Prajnaparamita, Dhammapada and more — complete with original Pāli and Sanskrit texts.</p>
+        <div class="feat-link">Explore Suttras →</div>
+      </a>
+      <a class="feature-card" onclick="showPage('articles')">
+        <span class="feat-icon">✍️</span>
+        <div class="feat-title">Teachings & Articles</div>
+        <p class="feat-desc">Deep-dive essays on Buddhist philosophy, the Four Noble Truths, Eightfold Path, and mindful living in the modern world.</p>
+        <div class="feat-link">Read Articles →</div>
+      </a>
+      <a class="feature-card" onclick="showPage('suttras')">
+        <span class="feat-icon">🧘</span>
+        <div class="feat-title">Meditation Guides</div>
+        <p class="feat-desc">Ānāpānasati, Mettā Bhāvanā, Vipassanā — step-by-step guides rooted in classical Theravāda and Mahāyāna traditions.</p>
+        <div class="feat-link">Start Practicing →</div>
+      </a>
+      <a class="feature-card" onclick="showPage('suttras')">
+        <span class="feat-icon">🌏</span>
+        <div class="feat-title">All Traditions</div>
+        <p class="feat-desc">Theravāda, Mahāyāna, Vajrayāna, Zen, Pure Land — every school of the Buddha's teaching covered in depth.</p>
+        <div class="feat-link">View Traditions →</div>
+      </a>
+      <a class="feature-card" onclick="showPage('articles')">
+        <span class="feat-icon">📿</span>
+        <div class="feat-title">Dhamma Glossary</div>
+        <p class="feat-desc">400+ Pāli and Sanskrit terms with clear definitions — from Anicca and Anattā to Śūnyatā and Tathāgatagarbha.</p>
+        <div class="feat-link">Browse Glossary →</div>
+      </a>
+      <a class="feature-card" onclick="showPage('contact')">
+        <span class="feat-icon">🤝</span>
+        <div class="feat-title">Join the Saṅgha</div>
+        <p class="feat-desc">Connect with the community, submit questions, suggest new texts, or simply reach out to say hello. The path is shared.</p>
+        <div class="feat-link">Get in Touch →</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <div class="quote-block">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">Three things cannot be long hidden: the sun, the moon, and the truth.</p>
+    <p class="quote-source">— The Buddha · Anguttara Nikāya</p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-name">
+            <span class="f-icon">☯︎</span> Bodhi<span>Path</span>
+          </div>
+          <p class="footer-brand-desc">A free digital treasury of Buddhist suttras, teachings, and wisdom — for every being walking the noble path.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Suttras</h5>
+          <ul>
+            <li><a onclick="showSutra('ratana')">Ratana Sutta</a></li>
+            <li><a onclick="showSutra('metta')">Metta Sutta</a></li>
+            <li><a onclick="showSutra('maitri')">Maitri Sutra</a></li>
+            <li><a onclick="showSutra('prajnaparamita')">Prajnaparamita</a></li>
+            <li><a onclick="showSutra('dhammapada')">Dhammapada</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Sections</h5>
+          <ul>
+            <li><a onclick="showPage('home')">Home</a></li>
+            <li><a onclick="showPage('articles')">Articles</a></li>
+            <li><a onclick="showPage('suttras')">All Suttras</a></li>
+            <li><a onclick="showPage('contact')">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Traditions</h5>
+          <ul>
+            <li><a>Theravāda</a></li>
+            <li><a>Mahāyāna</a></li>
+            <li><a>Vajrayāna</a></li>
+            <li><a>Zen / Chan</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 BodhiPath · May all beings be free from suffering</span>
+        <span>☯︎ · Sabbe Sattā Sukhitā Hontu</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════
+     ARTICLES PAGE
+════════════════════ -->
+<div class="page" id="page-articles">
+  <div class="page-hero">
+    <div class="page-hero-label">Knowledge & Insight</div>
+    <h1 class="page-title">Dharma <span class="lime">Articles</span></h1>
+    <p class="page-desc">Essays, teachings, and reflections on Buddhist philosophy, practice, and life on the path.</p>
+  </div>
+
+  <div class="articles-wrap">
+    <div class="articles-grid">
+
+      <a class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-glow"></div>
+          ☸
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="a-tag">Theravāda</span><span class="a-tag">Core Teaching</span></div>
+          <div class="article-title">The Four Noble Truths: A Complete Guide</div>
+          <p class="article-excerpt">The Buddha's first and most fundamental teaching — a complete diagnosis of the human condition and a path out of suffering.</p>
+          <div class="article-meta"><span>12 min read</span><span>March 2026</span></div>
+        </div>
+      </a>
+
+      <a class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-glow"></div>
+          🪷
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="a-tag">Mahāyāna</span><span class="a-tag">Philosophy</span></div>
+          <div class="article-title">Śūnyatā: The Teaching on Emptiness</div>
+          <p class="article-excerpt">All phenomena are empty of inherent self-existence — they arise dependently, without independent, fixed essence.</p>
+          <div class="article-meta"><span>9 min read</span><span>Feb 2026</span></div>
+        </div>
+      </a>
+
+      <a class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-glow"></div>
+          🧘
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="a-tag">Meditation</span><span class="a-tag">Practice</span></div>
+          <div class="article-title">Beginner's Guide to Ānāpānasati</div>
+          <p class="article-excerpt">Mindfulness of breathing — the most direct path to calming the mind and developing deep meditative absorption.</p>
+          <div class="article-meta"><span>7 min read</span><span>Jan 2026</span></div>
+        </div>
+      </a>
+
+      <a class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-glow"></div>
+          🎋
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="a-tag">Zen</span><span class="a-tag">Kōan</span></div>
+          <div class="article-title">Shoshin: The Zen Beginner's Mind</div>
+          <p class="article-excerpt">In the beginner's mind there are many possibilities — in the expert's mind, there are few. The essence of Shunryu Suzuki's teaching.</p>
+          <div class="article-meta"><span>6 min read</span><span>Dec 2025</span></div>
+        </div>
+      </a>
+
+      <a class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-glow"></div>
+          💛
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="a-tag">Mettā</span><span class="a-tag">Practice</span></div>
+          <div class="article-title">Loving-Kindness: Mettā Bhāvanā</div>
+          <p class="article-excerpt">How to systematically cultivate boundless goodwill toward all living beings — beginning with yourself, then radiating outward.</p>
+          <div class="article-meta"><span>8 min read</span><span>Nov 2025</span></div>
+        </div>
+      </a>
+
+      <a class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-glow"></div>
+          🔔
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="a-tag">Vajrayāna</span><span class="a-tag">Tibet</span></div>
+          <div class="article-title">The Bodhisattva Ideal in Tibetan Buddhism</div>
+          <p class="article-excerpt">The aspiration to attain enlightenment for the benefit of all sentient beings — the highest expression of Mahāyāna compassion.</p>
+          <div class="article-meta"><span>11 min read</span><span>Oct 2025</span></div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span>© 2026 BodhiPath · May all beings be free from suffering</span>
+        <span>☯︎ · Sabbe Sattā Sukhitā Hontu</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════
+     SUTTRAS PAGE
+════════════════════ -->
+<div class="page" id="page-suttras">
+  <div class="page-hero">
+    <div class="page-hero-label">Sacred Texts</div>
+    <h1 class="page-title">Buddhist <span class="lime">Suttras</span></h1>
+    <p class="page-desc">Browse the sacred scriptures by collection. Each sutra includes its original Pāli or Sanskrit name, context, key verses, and teachings.</p>
+  </div>
+
+  <div class="suttras-wrap">
+
+    <!-- Tabs -->
+    <div class="sutra-tabs">
+      <div class="sutra-tab active" onclick="switchTab('ratana', this)">💎 Ratana Sutta</div>
+      <div class="sutra-tab" onclick="switchTab('metta', this)">💛 Metta Sutta</div>
+      <div class="sutra-tab" onclick="switchTab('maitri', this)">🙏 Maitri Sutra</div>
+      <div class="sutra-tab" onclick="switchTab('prajnaparamita', this)">📿 Prajnaparamita</div>
+      <div class="sutra-tab" onclick="switchTab('dhammapada', this)">☸ Dhammapada</div>
+      <div class="sutra-tab" onclick="switchTab('satipattana', this)">🧘 Satipaṭṭhāna</div>
+    </div>
+
+    <!-- ── RATANA SUTTA ── -->
+    <div class="sutra-collection active" id="col-ratana">
+      <div class="collection-header">
+        <span class="col-icon">💎</span>
+        <div class="col-info">
+          <div class="col-name">Ratana Sutta</div>
+          <div class="col-pali">रत्तनसुत्त · Khuddaka Nikāya · Theravāda</div>
+          <p class="col-desc">The Jewel Discourse — one of the most sacred protective chants in Theravāda Buddhism, recited to invoke blessings through the power of truth. It praises the Three Jewels: the Buddha, the Dhamma, and the Saṅgha.</p>
+        </div>
+      </div>
+
+      <div class="sutra-list">
+
+        <div class="sutra-entry open" id="se-r1">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-r1')">
+            <div class="sutra-num">01</div>
+            <div class="sutra-info">
+              <div class="sutra-name">The Opening Invocation</div>
+              <div class="sutra-original">Yānīdha bhūtāni samāgatāni — Whatever beings are assembled here</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Context</div>
+              <p class="sutra-text">The sutta opens with an invitation addressed to all beings, both human and non-human, gathered to hear the teaching. The recitation of this sutta is believed to dispel misfortune and invoke protection through the power of truth (sacca-kiriyā).</p>
+              <div class="sutra-section-label">// Key Verses</div>
+              <div class="sutra-verse">
+                <p>Whatever beings are assembled here, on the ground or in the air — may all beings be happy; let them listen carefully to what is said.</p>
+                <cite>— Ratana Sutta, Verse 1 (Snp 2.1)</cite>
+              </div>
+              <a class="sutra-read-btn">Read Full Sutta ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-r2">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-r2')">
+            <div class="sutra-num">02</div>
+            <div class="sutra-info">
+              <div class="sutra-name">The Jewel of the Buddha</div>
+              <div class="sutra-original">Yaṃ kiñci vittaṃ idha vā huraṃ vā — Whatever wealth there is here or beyond</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Teaching</div>
+              <p class="sutra-text">This section praises the Buddha as the incomparable jewel — the Tathāgata who achieved what no being in the world has achieved, attaining the supreme goal of awakening and compassionately sharing it with all.</p>
+              <div class="sutra-verse">
+                <p>Whatever wealth there is, here or beyond, or whatever precious jewel there is in the heavens — there is nothing comparable to the Tathāgata. This too is a precious jewel in the Buddha. By this truth, may there be well-being.</p>
+                <cite>— Ratana Sutta, Verse 2</cite>
+              </div>
+              <a class="sutra-read-btn">Read Full Sutta ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-r3">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-r3')">
+            <div class="sutra-num">03</div>
+            <div class="sutra-info">
+              <div class="sutra-name">The Jewel of the Dhamma</div>
+              <div class="sutra-original">Khayaṃ virāgaṃ amataṃ paṇītaṃ — The destruction, dispassion, the deathless, the excellent</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Teaching</div>
+              <p class="sutra-text">The Dhamma — the teaching of the Buddha — is described as that which leads to the destruction of craving, dispassion, the deathless, and the excellent state of Nibbāna. It is the second precious jewel.</p>
+              <div class="sutra-verse">
+                <p>The destruction of craving, dispassion, the deathless, the excellent — what the Sakyan Sage attained in concentration — nothing is equal to this Dhamma. This too is a precious jewel in the Dhamma. By this truth, may there be well-being.</p>
+                <cite>— Ratana Sutta, Verse 5</cite>
+              </div>
+              <a class="sutra-read-btn">Read Full Sutta ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-r4">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-r4')">
+            <div class="sutra-num">04</div>
+            <div class="sutra-info">
+              <div class="sutra-name">The Jewel of the Saṅgha</div>
+              <div class="sutra-original">Ye puggalā aṭṭha sataṃ pasatthā — The eight persons praised by the good</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Teaching</div>
+              <p class="sutra-text">The Noble Saṅgha — the four pairs of noble persons who have entered the stream, are once-returners, non-returners, and Arahants — is praised as the supreme field of merit, the third jewel worthy of offerings and veneration.</p>
+              <div class="sutra-verse">
+                <p>The eight persons praised by the good — the four pairs — they are the disciples of the Blessed One, worthy of gifts, hospitality, offerings, and reverential salutation. They are an incomparable field of merit for the world.</p>
+                <cite>— Ratana Sutta, Verse 7</cite>
+              </div>
+              <a class="sutra-read-btn">Read Full Sutta ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── METTA SUTTA ── -->
+    <div class="sutra-collection" id="col-metta">
+      <div class="collection-header">
+        <span class="col-icon">💛</span>
+        <div class="col-info">
+          <div class="col-name">Metta Sutta</div>
+          <div class="col-pali">Karaṇīyamettā Sutta · Sutta Nipāta 1.8 · Theravāda</div>
+          <p class="col-desc">The Discourse on Loving-Kindness — the Buddha's sublime instruction on how to cultivate boundless goodwill (mettā) toward all living beings without exception. One of the most beloved and most recited texts in Theravāda Buddhism.</p>
+        </div>
+      </div>
+      <div class="sutra-list">
+
+        <div class="sutra-entry open" id="se-m1">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-m1')">
+            <div class="sutra-num">01</div>
+            <div class="sutra-info">
+              <div class="sutra-name">What Should Be Done</div>
+              <div class="sutra-original">Karaṇīyam atthakusalena — What should be done by one skilled in good</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Context</div>
+              <p class="sutra-text">The sutta opens by describing the qualities of one who is skilled in what is good — upright, gentle, humble, content, easy to support, without conceit. These are the ethical foundations from which loving-kindness naturally arises.</p>
+              <div class="sutra-verse">
+                <p>What should be done by one skilled in good, who wants to attain the state of peace: they should be able, upright, very upright, compliant, gentle, not proud.</p>
+                <cite>— Metta Sutta, Verse 1 (Snp 1.8)</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-m2">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-m2')">
+            <div class="sutra-num">02</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Radiating Loving-Kindness</div>
+              <div class="sutra-original">Mettañca sabbalokasmiṃ — And loving-kindness to all the world</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Practice</div>
+              <p class="sutra-text">The heart of the sutta — the instruction to radiate boundless loving-kindness in all directions, like a mother protecting her only child with her own life. This is the brahma-vihāra meditation, the divine abiding of loving-kindness.</p>
+              <div class="sutra-verse">
+                <p>Just as a mother would protect her only child with her own life, even so let one cultivate a boundless love towards all beings. Let thoughts of boundless love pervade the whole world — above, below, and across — without any obstruction, without any hatred, without any enmity.</p>
+                <cite>— Metta Sutta, Verses 7–8</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-m3">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-m3')">
+            <div class="sutra-num">03</div>
+            <div class="sutra-info">
+              <div class="sutra-name">The Result — No More Rebirth</div>
+              <div class="sutra-original">Na ca khuddaṃ samācare kiñci — And not doing any slight wrong</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Fruit</div>
+              <p class="sutra-text">The sutta concludes with the promise that one who dwells in the brahma-vihāra of loving-kindness, abandoning wrong views and practicing virtue, will not be reborn in any lower state.</p>
+              <div class="sutra-verse">
+                <p>Not falling into wrong views, but being virtuous and endowed with insight, having removed attachment to sensual pleasures — such a person will certainly never again undergo rebirth.</p>
+                <cite>— Metta Sutta, Verse 10</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── MAITRI SUTRA ── -->
+    <div class="sutra-collection" id="col-maitri">
+      <div class="collection-header">
+        <span class="col-icon">🙏</span>
+        <div class="col-info">
+          <div class="col-name">Maitri Sutra</div>
+          <div class="col-pali">मैत्री सूत्र · Mahāyāna Tradition · Sanskrit</div>
+          <p class="col-desc">The Mahāyāna counterpart to the Pāli Metta Sutta — the Maitri Sutra expands the practice of loving-kindness (maitrī) into the Bodhisattva ideal, cultivating boundless compassion for all sentient beings across all realms of existence.</p>
+        </div>
+      </div>
+      <div class="sutra-list">
+
+        <div class="sutra-entry open" id="se-mi1">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-mi1')">
+            <div class="sutra-num">01</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Maitrī — The First Brahma-Vihāra</div>
+              <div class="sutra-original">मैत्री — Loving-kindness as universal friendliness</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Teaching</div>
+              <p class="sutra-text">In the Mahāyāna understanding, maitrī is the sincere wish for all beings to have happiness and the causes of happiness. It is the first of the four immeasurables (apramāṇa) and the foundation of Bodhicitta — the awakening mind.</p>
+              <div class="sutra-verse">
+                <p>May all beings have happiness and the causes of happiness. May all beings be free from suffering and the causes of suffering. May all beings never be separated from joy that is free of suffering. May all beings dwell in equanimity, free from attachment and aversion.</p>
+                <cite>— The Four Immeasurables Prayer, Tibetan tradition</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-mi2">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-mi2')">
+            <div class="sutra-num">02</div>
+            <div class="sutra-info">
+              <div class="sutra-name">The Bodhisattva's Vow</div>
+              <div class="sutra-original">बोधिचित्त — The awakening mind dedicated to all</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Mahāyāna Expansion</div>
+              <p class="sutra-text">In Mahāyāna, loving-kindness is inseparable from the Bodhisattva vow — the commitment to remain in saṃsāra until all sentient beings have been liberated. This transforms individual practice into a cosmic act of compassion.</p>
+              <div class="sutra-verse">
+                <p>However innumerable sentient beings are, I vow to save them all. However inexhaustible the afflictions are, I vow to extinguish them all. However immeasurable the teachings are, I vow to master them all. However incomparable Buddhahood is, I vow to attain it.</p>
+                <cite>— The Four Bodhisattva Vows, Zen tradition</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── PRAJNAPARAMITA ── -->
+    <div class="sutra-collection" id="col-prajnaparamita">
+      <div class="collection-header">
+        <span class="col-icon">📿</span>
+        <div class="col-info">
+          <div class="col-name">Prajñāpāramitā Sūtras</div>
+          <div class="col-pali">प्रज्ञापारमिता · Perfection of Wisdom · Mahāyāna</div>
+          <p class="col-desc">The Perfection of Wisdom texts — including the Heart Sūtra and Diamond Sūtra — are the foundational Mahāyāna scriptures on śūnyatā (emptiness). They reveal that all phenomena are empty of inherent self-existence, liberating the practitioner from all conceptual grasping.</p>
+        </div>
+      </div>
+      <div class="sutra-list">
+
+        <div class="sutra-entry open" id="se-p1">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-p1')">
+            <div class="sutra-num">01</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Heart Sūtra — Form is Emptiness</div>
+              <div class="sutra-original">Prajñāpāramitāhṛdayasūtra · 260 characters</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Central Teaching</div>
+              <p class="sutra-text">The Heart Sūtra is the most condensed and most recited text in Mahāyāna Buddhism. In just 260 Chinese characters, it encapsulates the entire Prajñāpāramitā teaching. Avalokiteśvara, the Bodhisattva of Compassion, reveals to Śāriputra the nature of emptiness.</p>
+              <div class="sutra-verse">
+                <p>Form is emptiness, emptiness is form. Emptiness is not other than form; form is not other than emptiness. In the same way, feeling, perception, mental formation, and consciousness are emptiness.</p>
+                <cite>— Heart Sūtra (Prajñāpāramitāhṛdayasūtra)</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-p2">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-p2')">
+            <div class="sutra-num">02</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Diamond Sūtra — No Fixed Dharma</div>
+              <div class="sutra-original">Vajracchedikā Prajñāpāramitā · The Thunderbolt Cutter</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Teaching</div>
+              <p class="sutra-text">The Diamond Sūtra is a dialogue between the Buddha and his disciple Subhūti on the nature of non-attachment and the perfection of wisdom. The Buddha repeatedly deconstructs Subhūti's conceptual views through a series of paradoxical statements.</p>
+              <div class="sutra-verse">
+                <p>All conditioned phenomena are like a dream, an illusion, a bubble, a shadow, like dew or a flash of lightning. Thus should they be contemplated.</p>
+                <cite>— Diamond Sūtra, Final Verse (Vajracchedikā)</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── DHAMMAPADA ── -->
+    <div class="sutra-collection" id="col-dhammapada">
+      <div class="collection-header">
+        <span class="col-icon">☸</span>
+        <div class="col-info">
+          <div class="col-name">Dhammapada</div>
+          <div class="col-pali">ධම්මපද · Verses of the Dhamma · Khuddaka Nikāya</div>
+          <p class="col-desc">423 verses of distilled Buddhist wisdom organized in 26 chapters — the most beloved text in the entire Pāli Canon. Each verse is a gem of ethical and philosophical insight, beginning with the famous declaration that mind is the forerunner of all actions.</p>
+        </div>
+      </div>
+      <div class="sutra-list">
+
+        <div class="sutra-entry open" id="se-d1">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-d1')">
+            <div class="sutra-num">01</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Yamakavagga — The Pairs</div>
+              <div class="sutra-original">Chapter 1 · Verses 1–20</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Opening Verses</div>
+              <p class="sutra-text">The Dhammapada opens with the most famous Buddhist teaching on the primacy of mind. The two opening verses form a perfect pair — showing how both suffering and happiness arise from the quality of one's mental states and intentions.</p>
+              <div class="sutra-verse">
+                <p>Mind is the forerunner of all actions. All deeds are led by mind, created by mind. If one speaks or acts with a corrupt mind, suffering follows, as the wheel follows the hoof of an ox.</p>
+                <cite>— Dhammapada, Verse 1</cite>
+              </div>
+              <div class="sutra-verse">
+                <p>Mind is the forerunner of all actions. All deeds are led by mind, created by mind. If one speaks or acts with a serene mind, happiness follows, as a shadow that never departs.</p>
+                <cite>— Dhammapada, Verse 2</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-d2">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-d2')">
+            <div class="sutra-num">02</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Appamādavagga — Heedfulness</div>
+              <div class="sutra-original">Chapter 2 · Verses 21–32</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Key Verses</div>
+              <p class="sutra-text">Heedfulness (appamāda) — the opposite of negligence and carelessness — is declared to be the path to the deathless. It is the quality of diligent, careful attention that the Buddha considered the foundation of all spiritual progress.</p>
+              <div class="sutra-verse">
+                <p>Heedfulness is the path to the deathless. Heedlessness is the path to death. The heedful do not die. The heedless are as if already dead.</p>
+                <cite>— Dhammapada, Verse 21</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-d3">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-d3')">
+            <div class="sutra-num">03</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Cittavagga — The Mind</div>
+              <div class="sutra-original">Chapter 3 · Verses 33–43</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// On Taming the Mind</div>
+              <p class="sutra-text">Chapter 3 focuses on the nature of the mind — its tendency to wander, and the extraordinary benefit of training and taming it. The tamed mind brings happiness; the untamed mind brings suffering.</p>
+              <div class="sutra-verse">
+                <p>The mind is wavering and restless, difficult to guard and difficult to control. The wise person straightens it as a fletcher straightens an arrow.</p>
+                <cite>— Dhammapada, Verse 33</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SATIPATTHANA ── -->
+    <div class="sutra-collection" id="col-satipattana">
+      <div class="collection-header">
+        <span class="col-icon">🧘</span>
+        <div class="col-info">
+          <div class="col-name">Satipaṭṭhāna Sutta</div>
+          <div class="col-pali">Mahāsatipaṭṭhāna Sutta · Dīgha Nikāya 22 · Theravāda</div>
+          <p class="col-desc">The Discourse on the Four Foundations of Mindfulness — declared by the Buddha to be the direct path for the purification of beings, the overcoming of sorrow and lamentation, and the realization of Nibbāna.</p>
+        </div>
+      </div>
+      <div class="sutra-list">
+
+        <div class="sutra-entry open" id="se-s1">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-s1')">
+            <div class="sutra-num">01</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Kāyānupassanā — Mindfulness of Body</div>
+              <div class="sutra-original">The first foundation of mindfulness</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Practice</div>
+              <p class="sutra-text">The first foundation is mindfulness of the body — beginning with mindfulness of breathing (ānāpānasati), then extending to the four postures, clear comprehension in all activities, contemplation of the body's 32 parts, the four elements, and charnel ground contemplations.</p>
+              <div class="sutra-verse">
+                <p>Here, a practitioner, having gone to the forest or to the root of a tree or to an empty place, sits down cross-legged, holds their body erect, and sets up mindfulness in front of them. Mindful they breathe in, mindful they breathe out.</p>
+                <cite>— Satipaṭṭhāna Sutta, Ānāpāna section</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-s2">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-s2')">
+            <div class="sutra-num">02</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Vedanānupassanā — Mindfulness of Feelings</div>
+              <div class="sutra-original">The second foundation of mindfulness</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// Feeling Tone</div>
+              <p class="sutra-text">The second foundation is mindfulness of vedanā — the feeling tone of pleasant, unpleasant, or neutral that accompanies every experience. Insight into vedanā reveals how craving arises and how it can be stopped.</p>
+              <div class="sutra-verse">
+                <p>When feeling a pleasant feeling, they know: "I feel a pleasant feeling." When feeling an unpleasant feeling, they know: "I feel an unpleasant feeling." When feeling a neutral feeling, they know: "I feel a neutral feeling."</p>
+                <cite>— Satipaṭṭhāna Sutta, Vedanā section</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sutra-entry" id="se-s3">
+          <div class="sutra-entry-header" onclick="toggleSutra('se-s3')">
+            <div class="sutra-num">03</div>
+            <div class="sutra-info">
+              <div class="sutra-name">Dhammānupassanā — Mindfulness of Phenomena</div>
+              <div class="sutra-original">The fourth foundation · The Five Hindrances & Seven Factors</div>
+            </div>
+            <div class="sutra-chevron">▾</div>
+          </div>
+          <div class="sutra-body">
+            <div class="sutra-body-inner">
+              <div class="sutra-section-label">// The Highest Foundation</div>
+              <p class="sutra-text">The fourth foundation encompasses mindfulness of mental objects — the Five Hindrances, Five Aggregates, Six Sense Bases, Seven Factors of Awakening, and the Four Noble Truths. It culminates in direct insight into the nature of reality.</p>
+              <div class="sutra-verse">
+                <p>And what are the seven factors of awakening? Here, a practitioner develops the awakening factor of mindfulness … investigation of phenomena … energy … rapture … tranquility … concentration … equanimity — based on seclusion, dispassion, and cessation, ripening in release.</p>
+                <cite>— Satipaṭṭhāna Sutta, Bojjhaṅga section</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /suttras-wrap -->
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span>© 2026 BodhiPath · May all beings be free from suffering</span>
+        <span>☯︎ · Sabbe Sattā Sukhitā Hontu</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════
+     CONTACT PAGE
+════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-hero">
+    <div class="page-hero-label">Get in Touch</div>
+    <h1 class="page-title">Contact <span class="lime">Us</span></h1>
+    <p class="page-desc">Questions about the Dhamma, suggestions for new suttras, or just want to connect with the saṅgha? We'd love to hear from you.</p>
+  </div>
+
+  <div class="contact-wrap">
+    <div class="contact-form">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input class="form-input" type="text" placeholder="Enter your name...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Topic</label>
+        <select class="form-select">
+          <option>General Question</option>
+          <option>Suggest a Sutra</option>
+          <option>Report an Error</option>
+          <option>Collaboration</option>
+          <option>Dhamma Question</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Share your thoughts, questions, or suggestions..."></textarea>
+      </div>
+      <button class="btn-lime" style="width:100%; text-align:center; border-radius:8px;">Send Message ↗</button>
+    </div>
+
+    <div class="contact-info">
+      <div class="contact-card">
+        <span class="contact-card-icon">☯︎</span>
+        <div class="contact-card-label">Community</div>
+        <div class="contact-card-value">Open Saṅgha</div>
+      </div>
+      <div class="contact-card">
+        <span class="contact-card-icon">🌏</span>
+        <div class="contact-card-label">Available</div>
+        <div class="contact-card-value">Worldwide & Free</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span>© 2026 BodhiPath · May all beings be free from suffering</span>
+        <span>☯︎ · Sabbe Sattā Sukhitā Hontu</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ── PAGE NAVIGATION ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Close mobile menu
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ── SUTRA NAVIGATION ──
+function showSutra(id) {
+  showPage('suttras');
+  setTimeout(() => {
+    // activate the right tab
+    document.querySelectorAll('.sutra-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sutra-collection').forEach(c => c.classList.remove('active'));
+    document.getElementById('col-' + id).classList.add('active');
+    // find and activate the matching tab
+    const tabs = document.querySelectorAll('.sutra-tab');
+    const colMap = ['ratana','metta','maitri','prajnaparamita','dhammapada','satipattana'];
+    const idx = colMap.indexOf(id);
+    if (idx >= 0) tabs[idx].classList.add('active');
+  }, 100);
+}
+
+// ── TAB SWITCHING ──
+function switchTab(id, el) {
+  document.querySelectorAll('.sutra-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sutra-collection').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('col-' + id).classList.add('active');
+}
+
+// ── ACCORDION ──
+function toggleSutra(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// ── MOBILE MENU ──
+function toggleMobile() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// ── SCROLL ANIMATIONS ──
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.feature-card, .article-card, .sutra-entry, .collection-header').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(16px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>
